@@ -11,9 +11,9 @@
 
     <!-- firebase -->
     <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
-
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-database.js"></script>
     <!-- style css -->
-    <link rel="stylesheet" href="assets/css/style.css">
+
   </head>
   <body>
     <div class="container">
@@ -41,18 +41,11 @@
             </thead>
             <tbody>
                 <tr>
-                    <td scope="row">name</td>
-                    <td>test</td>
-                    <td>tset</td>
-                    <td>tset</td>
-                    <td>tset</td>
-                </tr>
-                <tr>
-                    <td scope="row">name</td>
-                    <td>test</td>
-                    <td>tset</td>
-                    <td>tset</td>
-                    <td>tset</td>
+                    <td scope="row" id="name">name</td>
+                    <td id="destination">test</td>
+                    <td id="frequency">tset</td>
+                    <td id="next-arrival">tset</td>
+                    <td id="minutes-away">tset</td>
                 </tr>
             </tbody>
         </table>
@@ -67,15 +60,15 @@
         </h5>
         <div class="form-group ml-1 mr-1 mt-1">
             <label class="font-weight-bolder" for="">Train Name</label>
-            <input class="form-control" name="" id="train-name-form" aria-describedby="emailHelpId" placeholder="Train Name" value="">
+            <input class="form-control" id="train-name-form" type="text" placeholder="Train Name">
             <label class="font-weight-bolder" for="">Destination</label>
-            <input class="form-control" name="" id="destination-form" aria-describedby="emailHelpId" placeholder="Destination" value="">
+            <input class="form-control" id="destination-form" type="text" placeholder="Destination">
             <label class="font-weight-bolder" for="">First Train Time (HH:mm - military time)</label>
-            <input class="form-control" name="" id="train-time-form" aria-describedby="emailHelpId" placeholder="First Train Time (HH:mm - military time)" value="">
+            <input class="form-control" id="train-time-form" type="text" placeholder="First Train Time (HH:mm - military time)">
             <label class="font-weight-bolder" for="">Frequency (min)</label>
-            <input class="form-control" name="" id="frequency-form" aria-describedby="emailHelpId" placeholder="Frequency (min)" value="">
+            <input class="form-control" id="frequency-form" type="text" placeholder="Frequency (min)">
         </div>
-        <button type="submit" class="btn btn-primary" id="submit-button">Submit</button>
+        <button type="submit" class="btn btn-primary" id="add-train-button">Submit</button>
     </div>
      <hr class="my-5">
     </div>
