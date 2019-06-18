@@ -22,7 +22,7 @@ var frequency = "";
 $("#add-train-button").on("click", function(event) {
     event.preventDefault();
     // logic for storing and retrieving train paramaters
-    trainName = $("#train-name-form").val().trim();
+    trainName = $("#train-name-form").val();
     destination = $("#destination-form").val();
     firstTrainTime = $("#train-time-form").val();
     frequency = $("#frequency-form").val();
@@ -46,7 +46,11 @@ dataRef.ref().on("child_added", function(childSnapshot){
     console.log(childSnapshot.val().frequency);
 
     // append to table
-    $("tbody").append("<tr><td scope='row'>" + childSnapshot.val().trainName);
+    $("tbody").append("<tr><td scope='row' id='train-name'>" + childSnapshot.val().trainName +
+    "</td><td id='destination'>" + childSnapshot.val().destination +
+    "</td><td id='frequency'>" + childSnapshot.val().frequency +
+    "</td><td id='next-arrival'>" + childSnapshot.val().firstTrainTime +
+    "</td></tr>");
 })
 
 dataRef.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function(snapshot){
