@@ -26,6 +26,8 @@ $("#add-train-button").on("click", function(event) {
     destination = $("#destination-form").val();
     firstTrainTime = $("#train-time-form").val();
     frequency = $("#frequency-form").val();
+
+
     // push code to database
     dataRef.ref().push({
         trainName: trainName,
@@ -36,56 +38,55 @@ $("#add-train-button").on("click", function(event) {
     });
 });
 
-// firebase watcher
-dataRef.ref().on("child_added", function(childSnapshot){
-
-    // log everything fromt he snapshot
-    console.log(childSnapshot.val().trainName);
-    console.log(childSnapshot.val().destination);
-    console.log(childSnapshot.val().firstTrainTime);
-    console.log(childSnapshot.val().frequency);
-
-    // append to table
-    $("tbody").append("<tr><td scope='row' id='train-name'>" + childSnapshot.val().trainName +
-    "</td><td id='destination'>" + childSnapshot.val().destination +
-    "</td><td id='frequency'>" + childSnapshot.val().frequency +
-    " min</td><td id='next-arrival'>" + childSnapshot.val().firstTrainTime +
-    "</td><td id='minutes-away'>" + 
-    "</td></tr>");
-})
-
 dataRef.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function(snapshot){
     $("train-name-form").text(snapshot.val().trainName);
     $("destination-form").text(snapshot.val().destination);
     $("train-time-form").text(snapshot.val().firstTrainTime);
     $("frequency-form").text(snapshot.val().frequency);
 
+});
 
+// firebase watcher
+dataRef.ref().on("child_added", function(childSnapshot){
 
+    // log everything from the snapshot
+    // console.log(childSnapshot.val().trainName);
+    // console.log(childSnapshot.val().destination);
+    // console.log(childSnapshot.val().firstTrainTime);
+    // console.log(childSnapshot.val().frequency);
     // frequency
-    var tFrequency = snapshot.val().frequency;
+    var tFrequency = childSnapshot.val().frequency;
+    console.log(tFrequency + "test")
     // moment.js time conversions
-    var firstTime = snapshot.val().firstTrainTime;
-    // first time
-    var firstTimeConverted = moment(firstTime, "hh:mm").subtract(1, "years");
-    console.log("what" + firstTimeConverted);
-    // current time
-    var currentTime = moment();
-    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
-    // diff in time
+    var firstTime = childSnapshot.val().firstTrainTime;
+    // First Time (pushed back 1 year to make sure it comes before current time)
+    var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
+    console.log(firstTimeConverted);
+    // Difference between the times
     var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
     console.log("DIFFERENCE IN TIME: " + diffTime);
-    // time apart(remainder)
+    // Time apart (remainder)
     var tRemainder = diffTime % tFrequency;
     console.log(tRemainder);
-    // minutes until train
+    // Minute Until Train
     var tMinutesTillTrain = tFrequency - tRemainder;
     console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
-    // next train
+    // Next Train
     var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+    console.log("ARRIVAL TIME: " + moment(nextTrain).format("HH:mm"));
 
-    var nextArrival = $("#next-arrival").text(firstTimeConverted, "HH:mm");
-    var minutesAway = $("#minutes-away").text(nextTrain)
+    // append to table
+    $("tbody").append("<tr><td scope='row' id='train-name'>" + childSnapshot.val().trainName +
+    "</td><td id='destination'>" + childSnapshot.val().destination +
+    "</td><td id='frequency'>" + childSnapshot.val().frequency +
+    " min</td><td id='next-arrival'>" + moment(nextTrain).format("HH:mm") +
+    "</td><td id='minutes-away'>" + tMinutesTillTrain + 
+    "</td></tr>");
+})
 
-});
+    // Current Time
+    var currentTime = moment();
+    console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
+    // show current time on jumbotron
+    $("#current-time").text(moment(currentTime).format("HH:mm:ss"));
+
