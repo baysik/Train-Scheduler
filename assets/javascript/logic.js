@@ -11,7 +11,7 @@ appId: "1:88806088749:web:7c8366ac777369d7"
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-var dataRef = firebase.database();
+var db = firebase.database();
 
 // iniital values
 var trainName = "";
@@ -29,31 +29,17 @@ $("#add-train-button").on("click", function(event) {
 
 
     // push code to database
-    dataRef.ref().push({
+    db.ref().push({
         trainName: trainName,
         destination: destination,
         firstTrainTime: firstTrainTime,
-        frequency: frequency,
-        dateAdded: firebase.database.ServerValue.TIMESTAMP
+        frequency: frequency
     });
 });
 
-dataRef.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function(snapshot){
-    $("train-name-form").text(snapshot.val().trainName);
-    $("destination-form").text(snapshot.val().destination);
-    $("train-time-form").text(snapshot.val().firstTrainTime);
-    $("frequency-form").text(snapshot.val().frequency);
-
-});
-
 // firebase watcher
-dataRef.ref().on("child_added", function(childSnapshot){
+db.ref().on("child_added", function(childSnapshot){
 
-    // log everything from the snapshot
-    // console.log(childSnapshot.val().trainName);
-    // console.log(childSnapshot.val().destination);
-    // console.log(childSnapshot.val().firstTrainTime);
-    // console.log(childSnapshot.val().frequency);
     // frequency
     var tFrequency = childSnapshot.val().frequency;
     console.log(tFrequency + "test")
@@ -82,11 +68,7 @@ dataRef.ref().on("child_added", function(childSnapshot){
     " min</td><td id='next-arrival'>" + moment(nextTrain).format("HH:mm") +
     "</td><td id='minutes-away'>" + tMinutesTillTrain + 
     "</td></tr>");
-})
 
-    // Current Time
-    var currentTime = moment();
-    console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
-    // show current time on jumbotron
-    $("#current-time").text(moment(currentTime).format("HH:mm:ss"));
+});
+
 
