@@ -1,5 +1,7 @@
 # Train-Scheduler
-Train Scheduler will take the user input and calculate when the next train will arrive
+Train Scheduler will take the user input and calculate when the next train will arrive.
+
+https://baysik.github.io/Train-Scheduler/
 
 Instructions:
 1. Input a name for the train you wish to track
